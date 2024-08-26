@@ -1,7 +1,7 @@
 # tic-tac-toe
 Tic Tac Toe game in terminal using python
 
-<p align="center">
+<pre style="align=center">
 1      |2      |3 ___  
  \  /  | \  /  | |   | 
   \/   |  \/   | |   | 
@@ -22,5 +22,5 @@ Tic Tac Toe game in terminal using python
   /\   | |   | |  /\   
  /  \  | |___| | /  \  
        |       |       
-</p>
+</pre>
 
