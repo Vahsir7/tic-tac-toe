@@ -36,7 +36,7 @@ def run():
     x = int(input("Enter choice:"))
     try:
         if x==1:
-            game(1,1)
+            game(1,0,False)
         elif x==2:
             exit()
         else:
@@ -47,48 +47,52 @@ def run():
         clearscrn()
         run()
 
-def game(value,count):
+def game(value,count,flag):
     drawGrid(state)
-    print("\n" * 5)
-    
-    if count == 9:
-        winner(0)
-        return ""
-    user = "X" if value == 1 else "O"
+    if flag:
+        winner(value*-1)
+    else:
+        print("\n" * 5)
+        
+        if count == 9:
+            winner(0)
+            return ""
+        user = "X" if value == 1 else "O"
 
-    n = input(f"{user} marks in location: ")
+        n = input(f"{user} marks in location: ")
+        print("Dummy")
+        try:
+            n = int(n)
+            if 1 <= n <= 9:
+                row = (n - 1) // 3
+                col = (n - 1) % 3
+                print("Dummy")
+                if state[row][col] == 0:
+                    state[row][col] = value
+                    
 
-    try:
-        n = int(n)
-        if 1 <= n <= 9:
-            row = (n - 1) // 3
-            col = (n - 1) % 3
-            if state[row][col] == 0:
-                state[row][col] = value
-                value *= -1
+                    print("checking")
+                    ans = result(state,value)
+                    print("checked")
+                    if ans != 0:
+                        flag = True
 
-                print("checking")
-                ans = result(state,value)
-                print("checked")
-                if ans != 0:
-                    winner(value)
+                    clearscrn()
+                    value *= -1
+                    game(value,count+1,flag)
 
-                clearscrn()
-                game(value,count+1)
-
+                else:
+                    print("!!!Cell already taken!!!")
+                    input("Press Enter key to continue...")
+                    clearscrn()
+                    game(value,count,flag)
             else:
-                print("!!!Cell already taken!!!")
-                input("Press Enter key to continue...")
-                clearscrn()
-                game(value,count)
-        else:
-            raise ValueError
-    except ValueError:
-        print("!!!Wrong Value!!!")
-        input("Press Enter key to continue...")
-        clearscrn()
-        game(value,count)
-
+                raise ValueError
+        except ValueError:
+            print("!!!Wrong Value!!!")
+            input("Press Enter key to continue...")
+            clearscrn()
+            game(value,count,flag)
 
 def winner(value):
     if value == 1:
@@ -100,21 +104,24 @@ def winner(value):
 
 def result(state,value):
 
-    print(state,value)
     for i in range(3):
         if state[i][0] == state[i][1] == state[i][2] == value:
             return value
+        if state[0][i] == state[1][i] == state[2][i] == value:
+            return value
+        
     if state[0][0] == state[1][1] == state[2][2] == value:
             return value
     if state[0][2] == state[1][1] == state[2][0] == value:
             return value
-    return 0
+    return False
 
 def clearscrn():
     if os.name == 'nt':  # For Windows
         os.system('cls')
     else:  # For Linux and macOS
         os.system('clear')
+
 
 if __name__ == "__main__":
     run()
